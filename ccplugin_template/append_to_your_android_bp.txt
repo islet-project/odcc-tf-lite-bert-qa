@@ -1,0 +1,81 @@
+// This should include all AIDL files, such as "user_aidl_for_realm" and "user_imported_aidl_for_realm".
+aidl_interface {
+    name: "user_aidl_interface",
+    srcs: [""], // NOTE: Please fill in this part
+    unstable: true,
+    flags: [
+        "-Werror",
+        "-Wno-mixed-oneway",
+    ],
+    backend: {
+        java: {
+            gen_rpc: true,
+        },
+        cpp: {
+            enabled: true,
+        },
+    },
+}
+
+filegroup {
+    name: "user_service_for_realm",
+    srcs: [""], // NOTE: Please fill in this part
+}
+
+ /*
+ * The actual implementation of this interface runs on "user_service_for_realm" in the Realm world.
+ * The CCProxyService uses this interface to relays requests from the Normal World to the Realm world.
+ */
+filegroup {
+    name: "user_aidl_for_realm",
+    srcs: [""], // NOTE: Please fill in this part
+}
+
+/*
+ * (Optional - if needed by your service)
+ * The imported AIDL files used by "user_aidl_for_realm".
+ * If you have no such files, please remove the "user_imported_aidl_for_realm" and "generate_realm_proxy_callback" from all of the Android.bp files
+ */
+filegroup {
+    name: "user_imported_aidl_for_realm",
+    srcs: [""], // NOTE: Please fill in this part
+}
+
+// It's required for generating the CCPlugIn components.
+filegroup {
+    name: "user_uppermost_android_bp_path",
+    srcs: ["Android.bp"],
+}
+
+// Configure this android_app section to define the CCPlugIn application and its dependencies.
+android_app {
+    name: "", // NOTE: Please fill in this part
+    srcs: [
+        ":generate_cc_service",
+    ],
+    resource_dirs: [""], // NOTE: Please fill in this part
+    manifest: "", // NOTE: Please fill in this part
+    additional_manifests: [
+        ":generated_android_manifest",
+    ],
+    assets: [
+        ":ccplugin_android_mockups_dex",
+        ":java_lib_for_realm_dex",
+        ":ccplugin_vm_configs",
+    ],
+    static_libs: [
+        "androidx-constraintlayout_constraintlayout",
+        "androidx.appcompat_appcompat",
+        "com.google.android.material_material",
+        "user_aidl_interface-java",
+        "ccplugin_aidl-java",
+        "libccplugin_log",
+        "libccplugin_vm",
+    ],
+    sdk_version: "system_current",
+    jni_libs: ["libccplugin_native"],
+    jni_uses_platform_apis: true,
+    use_embedded_native_libs: true,
+    v4_signature: true,
+    min_sdk_version: "33",
+}

@@ -2,20 +2,42 @@ package {
     default_applicable_licenses: ["Android-Apache-2.0"],
 }
 
+filegroup {
+    name: "tflite_bertqa_demo_service_service_for_realm",
+    srcs: ["java/org/tensorflow/lite/examples/bertqaservice/BertQaService.java"],
+}
+
 android_app {
     name: "TfLiteBertQADemoService",
     srcs: [
-        "java/**/*.java",
+        ":tflite_bertqa_demo_service_generate_cc_service",
+        "java/org/tensorflow/lite/examples/bertqaservice/MainActivity.java",
     ],
     resource_dirs: ["res"],
+    manifest: "AndroidManifest.xml",
+    additional_manifests: [
+        ":tflite_bertqa_demo_service_generated_android_manifest",
+    ],
     asset_dirs: ["assets"],
+    assets: [
+        ":ccplugin_android_mockups_dex",
+        ":tflite_bertqa_demo_service_java_lib_for_realm_dex",
+        ":tflite_bertqa_demo_service_ccplugin_vm_configs",
+        ":tflite_bertqa_demo_service_generate_realm_target_service_str",
+    ],
     static_libs: [
-        "org.tensorflow.lite.examples.bertqa-aidl-java",
+        "androidx-constraintlayout_constraintlayout",
+        "androidx.appcompat_appcompat",
+        "com.google.android.material_material",
+        "tflite_bertqa_demo_service_aidl_interface-java",
+        "ccplugin_aidl-java",
+        "libccplugin_log",
+        "libccplugin_vm",
         "TFLiteTaskTest-lib",
         "TFLiteTaskBase-lib",
     ],
     sdk_version: "system_current",
-    jni_libs: [],
+    jni_libs: ["libccplugin_native"],
     jni_uses_platform_apis: true,
     use_embedded_native_libs: true,
     v4_signature: true,
