@@ -1,6 +1,5 @@
-package {
-    default_applicable_licenses: ["Android-Apache-2.0"],
-}
+// Copyright (c) 2026 Samsung Electronics Co., Ltd. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 // Java secure payload composed of unmodified original service and its
 // dependencies. In this case Logger.java. The AIDLs have been added.
@@ -8,23 +7,25 @@ package {
 // The AIDL is a code dependency, it uses mockups as well here, it won't
 // function as Binder anyway, the methods will only be called from CPP.
 java_library {
-    name: "tflite_bertqa_demo_service_java_lib_for_realm",
+    name: "tflite_bertqa_demo_provisioning_service_java_lib_for_realm",
     srcs: [
-        ":tflite_bertqa_demo_service_service_for_realm",
+        ":tflite_bertqa_demo_provisioning_service_service_for_realm",
     ],
     static_libs: [
-        "tflite_bertqa_demo_service_aidl_interface-java",
+        "tflite_bertqa_demo_provisioning_service_aidl_interface-java",
+        "android.system.virtualization.payload-java",
+        "libccplugin_mockups",
         "libccplugin_log",
-        "TFLiteTaskTest-lib",
-        "TFLiteTaskBase-lib",
+        "TFLiteTaskTestProvisioning-lib",
+        "TFLiteTaskBaseProvisioning-lib",
     ],
 }
 
 // A rule to package the above java payload as an asset.
 genrule {
-    name: "tflite_bertqa_demo_service_java_lib_for_realm_dex",
+    name: "tflite_bertqa_demo_provisioning_service_java_lib_for_realm_dex",
     tools: [ "d8" ],
-    srcs: [ ":tflite_bertqa_demo_service_java_lib_for_realm" ],
+    srcs: [ ":tflite_bertqa_demo_provisioning_service_java_lib_for_realm" ],
     out: [ "confidential-service.dex" ],
     cmd : "$(location d8) $(in) --output $(genDir)/confidential-service.zip && " +
           "unzip $(genDir)/confidential-service.zip -d $(genDir) &&" +
@@ -32,62 +33,62 @@ genrule {
 }
 
 gensrcs {
-    name: "tflite_bertqa_demo_service_generate_cc_service",
+    name: "tflite_bertqa_demo_provisioning_service_generate_cc_service",
     tools: ["aidl"],
-    srcs: [":tflite_bertqa_demo_service_service_for_realm"],
+    srcs: [":tflite_bertqa_demo_provisioning_service_service_for_realm"],
     output_extension: "java",
     tool_files: [
-        ":tflite_bertqa_demo_service_aidl_for_realm",
-        ":tflite_bertqa_demo_service_uppermost_android_bp_path",
-        ":tflite_bertqa_demo_service_imported_aidl_for_realm",
+        ":tflite_bertqa_demo_provisioning_service_aidl_for_realm",
+        ":tflite_bertqa_demo_provisioning_service_uppermost_android_bp_path",
+        ":tflite_bertqa_demo_provisioning_service_imported_aidl_for_realm",
     ],
     cmd: "$(location aidl) --lang=java " +
     "-Weverything -Wno-missing-permission-annotation " +
     "-Werror -Wno-mixed-oneway --min_sdk_version current " +
-    "--ninja -o out/`dirname $(location :tflite_bertqa_demo_service_service_for_realm) | sed 's#^\\./##'` " +
-    "-N . -N `dirname $(location :tflite_bertqa_demo_service_uppermost_android_bp_path)`/aidl " +
-    "$(location :tflite_bertqa_demo_service_aidl_for_realm)",
+    "--ninja -o out/`dirname $(location :tflite_bertqa_demo_provisioning_service_service_for_realm) | sed 's#^\\./##'` " +
+    "-N . -N `dirname $(location :tflite_bertqa_demo_provisioning_service_uppermost_android_bp_path)`/aidl " +
+    "$(location :tflite_bertqa_demo_provisioning_service_aidl_for_realm)",
 }
 
 genrule {
-    name: "tflite_bertqa_demo_service_generate_android_manifest",
+    name: "tflite_bertqa_demo_provisioning_service_generate_android_manifest",
     tools: ["aidl"],
     srcs: [
-        ":tflite_bertqa_demo_service_aidl_for_realm",
-        ":tflite_bertqa_demo_service_uppermost_android_bp_path",
-        ":tflite_bertqa_demo_service_imported_aidl_for_realm",
+        ":tflite_bertqa_demo_provisioning_service_aidl_for_realm",
+        ":tflite_bertqa_demo_provisioning_service_uppermost_android_bp_path",
+        ":tflite_bertqa_demo_provisioning_service_imported_aidl_for_realm",
     ],
     out: ["AndroidManifest.xml"],
     cmd: "$(location aidl) --lang=java " +
     "-Weverything -Wno-missing-permission-annotation " +
     "-Werror -Wno-mixed-oneway --min_sdk_version current " +
-    "--ninja -o out -N . -N $$(dirname $(location :tflite_bertqa_demo_service_uppermost_android_bp_path))/aidl " +
-    "$(location :tflite_bertqa_demo_service_aidl_for_realm)",
+    "--ninja -o out -N . -N $$(dirname $(location :tflite_bertqa_demo_provisioning_service_uppermost_android_bp_path))/aidl " +
+    "$(location :tflite_bertqa_demo_provisioning_service_aidl_for_realm)",
 }
 
 genrule {
-    name: "tflite_bertqa_demo_service_generate_realm_target_service_str",
+    name: "tflite_bertqa_demo_provisioning_service_generate_realm_target_service_str",
     tools: ["aidl"],
     srcs: [
-        ":tflite_bertqa_demo_service_aidl_for_realm",
-        ":tflite_bertqa_demo_service_uppermost_android_bp_path",
-        ":tflite_bertqa_demo_service_imported_aidl_for_realm",
+        ":tflite_bertqa_demo_provisioning_service_aidl_for_realm",
+        ":tflite_bertqa_demo_provisioning_service_uppermost_android_bp_path",
+        ":tflite_bertqa_demo_provisioning_service_imported_aidl_for_realm",
     ],
     out: ["target_service.txt"],
     cmd: "$(location aidl) --lang=cpp " +
     "-Weverything -Wno-missing-permission-annotation " +
     "-Werror -Wno-mixed-oneway --min_sdk_version current " +
     "-h external/CCPlugIn/gen " +
-    "--ninja -o out -N . -N $$(dirname $(location :tflite_bertqa_demo_service_uppermost_android_bp_path))/aidl " +
-    "$(location :tflite_bertqa_demo_service_aidl_for_realm)",
+    "--ninja -o out -N . -N $$(dirname $(location :tflite_bertqa_demo_provisioning_service_uppermost_android_bp_path))/aidl " +
+    "$(location :tflite_bertqa_demo_provisioning_service_aidl_for_realm)",
 }
 
 filegroup {
-    name: "tflite_bertqa_demo_service_generated_android_manifest",
-    srcs: [":tflite_bertqa_demo_service_generate_android_manifest"],
+    name: "tflite_bertqa_demo_provisioning_service_generated_android_manifest",
+    srcs: [":tflite_bertqa_demo_provisioning_service_generate_android_manifest"],
 }
 
 filegroup {
-    name: "tflite_bertqa_demo_service_ccplugin_vm_configs",
+    name: "tflite_bertqa_demo_provisioning_service_ccplugin_vm_configs",
     srcs: ["vm_configs/*.json"],
 }

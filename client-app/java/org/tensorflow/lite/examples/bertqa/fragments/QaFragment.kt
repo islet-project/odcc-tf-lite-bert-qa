@@ -1,5 +1,6 @@
 /*
  * Copyright 2022 The TensorFlow Authors. All Rights Reserved.
+ * Copyright (c) 2026 Samsung Electronics Co., Ltd. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+// Samsung's changes: Handle long running operations
+
 package org.tensorflow.lite.examples.bertqa.fragments
 
 import android.os.Bundle
@@ -26,6 +30,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.FrameLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
@@ -45,6 +51,8 @@ class QaFragment : Fragment(), BertQaHelper.AnswererListener {
     private val args: QaFragmentArgs by navArgs()
     private var content: String = ""
     private var questions: List<String> = emptyList()
+    private lateinit var progressContainer: FrameLayout
+    private lateinit var progressText: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,12 +61,22 @@ class QaFragment : Fragment(), BertQaHelper.AnswererListener {
     ): View {
         _fragmentQaBinding = FragmentQaBinding.inflate(inflater, container, false)
 
+        progressContainer = fragmentQaBinding.root.findViewById(R.id.progressContainer)
+        progressText = fragmentQaBinding.root.findViewById(R.id.progressText)
+
         return fragmentQaBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        bertQaHelper = BertQaHelper(context = requireContext(), answererListener = this)
+        bertQaHelper = BertQaHelper.getInstance()
+        bertQaHelper.setAnswererListener(this)
+
+        if (!bertQaHelper.tryInitialize()) {
+            // Show progress while initializing BertQa model
+            showProgress("Initializing BertQa model...")
+        }
+
         val client = LoadDataSetClient(requireActivity())
         client.loadJson()?.let {
             content = it.getContents()[args.datasetPosition]
@@ -155,16 +173,40 @@ class QaFragment : Fragment(), BertQaHelper.AnswererListener {
             }
     }
 
-    // Update the values displayed in the bottom sheet. Reset answerer.
+    // Update the values displayed in the bottom sheet. Mark for reinitialization if parameters changed.
     private fun updateControlsUi() {
         fragmentQaBinding.bottomSheetLayout.threadsValue.text = bertQaHelper.numThreads.toString()
-        // Needs to be cleared instead of reinitialized because the GPU
-        // delegate needs to be initialized on the thread using it when applicable
-        bertQaHelper.clearBertQuestionAnswerer()
+        // Only mark for reinitialization if parameters have actually changed from the last initialization
+        bertQaHelper.checkAndMarkForReinitialization()
     }
 
     private fun setQuestion(position: Int) {
         fragmentQaBinding.edtQuestion.setText(questions[position])
+    }
+
+    private fun showProgress(message: String) {
+        progressText.text = message
+        progressContainer.visibility = View.VISIBLE
+        // Disable interaction with the bottom view and tvDatasetContent
+        fragmentQaBinding.bottomView.isClickable = false
+        fragmentQaBinding.bottomView.alpha = 0.5f
+        fragmentQaBinding.tvDatasetContent.isClickable = false
+        fragmentQaBinding.tvDatasetContent.alpha = 0.5f
+        // Disable and gray out the bottom sheet layout
+        fragmentQaBinding.bottomSheetLayout.bottomSheetLayout.isClickable = false
+        fragmentQaBinding.bottomSheetLayout.bottomSheetLayout.alpha = 0.5f
+    }
+
+    private fun hideProgress() {
+        progressContainer.visibility = View.GONE
+        // Enable interaction with the bottom view and tvDatasetContent
+        fragmentQaBinding.bottomView.isClickable = true
+        fragmentQaBinding.bottomView.alpha = 1.0f
+        fragmentQaBinding.tvDatasetContent.isClickable = true
+        fragmentQaBinding.tvDatasetContent.alpha = 1.0f
+        // Enable and restore bottom sheet layout
+        fragmentQaBinding.bottomSheetLayout.bottomSheetLayout.isClickable = true
+        fragmentQaBinding.bottomSheetLayout.bottomSheetLayout.alpha = 1.0f
     }
 
     private fun answerQuestion(question: String) {
@@ -193,10 +235,12 @@ class QaFragment : Fragment(), BertQaHelper.AnswererListener {
     }
 
     override fun onError(error: String) {
+        hideProgress()
         Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
     }
 
     override fun onResults(results: List<QaAnswer>?, inferenceTime: Long) {
+        hideProgress()
         results?.first()?.let {
             highlightAnswer(it.text)
         }
@@ -207,13 +251,27 @@ class QaFragment : Fragment(), BertQaHelper.AnswererListener {
         )
     }
 
+    override fun onInitializationSuccess() {
+        // Hide progress when model initialization is successful
+        hideProgress()
+    }
+
+    override fun onReinitializationNeeded() {
+        // Show progress when model needs reinitialization
+        showProgress("Reinitializing BertQa model...")
+    }
+
+    override fun onInferenceStarting() {
+        // Show progress when inference is starting
+        showProgress(getString(R.string.performing_inference))
+    }
+
     override fun onDestroyView() {
         fragmentQaBinding.edtQuestion.addTextChangedListener(null)
         super.onDestroyView()
     }
 
     override fun onDestroy() {
-        bertQaHelper.clearBertQuestionAnswerer()
         super.onDestroy()
     }
 }

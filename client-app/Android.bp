@@ -3,21 +3,21 @@ package {
 }
 
 android_app {
-    name: "TfLiteBertQADemo",
+    name: "TfLiteBertQADemoProvisioning",
     srcs: ["java/**/*.kt", "java/**/*.java", "androidx_viewbinding_src/**/*.java"],
     resource_dirs: ["res"],
     asset_dirs: ["./assets"],
     static_libs: [
-        "tflite_bertqa_demo_service_aidl_interface-java",
+        "tflite_bertqa_demo_provisioning_service_aidl_interface-java",
         "androidx-constraintlayout_constraintlayout",
         "androidx.appcompat_appcompat",
         "com.android.microdroid.testservice-java",
         "androidx.navigation_navigation-fragment-ktx",
         "com.google.android.material_material",
         "androidx.navigation_navigation-ui",
-        "TFLiteTaskTest-lib",
-        "TFLiteTaskBase-lib",
-        "gson-lib"
+        "TFLiteTaskTestProvisioning-lib",
+        "TFLiteTaskBaseProvisioning-lib",
+        "gson-provisioning-lib"
     ],
     sdk_version: "system_current",
     jni_libs: [],
