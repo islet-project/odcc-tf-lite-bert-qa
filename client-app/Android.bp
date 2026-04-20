@@ -8,7 +8,7 @@ android_app {
     resource_dirs: ["res"],
     asset_dirs: ["./assets"],
     static_libs: [
-        "org.tensorflow.lite.examples.bertqa-aidl-java",
+        "tflite_bertqa_demo_service_aidl_interface-java",
         "androidx-constraintlayout_constraintlayout",
         "androidx.appcompat_appcompat",
         "com.android.microdroid.testservice-java",

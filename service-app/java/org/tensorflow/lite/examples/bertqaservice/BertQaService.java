@@ -15,8 +15,8 @@ import org.tensorflow.lite.task.text.qa.BertQuestionAnswerer;
 import org.tensorflow.lite.task.text.qa.BertQuestionAnswerer.BertQuestionAnswererOptions;
 import org.tensorflow.lite.task.text.qa.QaAnswer;
 
-import org.tensorflow.lite.examples.bertqa.QaAnswerData;
-import org.tensorflow.lite.examples.bertqa.IBertQaInterface;
+import org.tensorflow.lite.examples.bertqaservice.QaAnswerData;
+import org.tensorflow.lite.examples.bertqaservice.IBertQaInterface;
 
 public class BertQaService extends Service {
 
@@ -39,8 +39,8 @@ public class BertQaService extends Service {
                 .build();
 
         try {
-            bertQuestionAnswerer =
-                    BertQuestionAnswerer.createFromFileAndOptions(getApplicationContext(), BERT_QA_MODEL, options);
+            bertQuestionAnswerer = BertQuestionAnswerer.createFromFileAndOptions(getApplicationContext(), BERT_QA_MODEL,
+                    options);
         } catch (Exception e) {
             Log.e(TAG, "TFLite failed to load model with error: " + e.getMessage());
             throw new RemoteException("Cannot initialize BertQuestionAnswerer " + e.getMessage());

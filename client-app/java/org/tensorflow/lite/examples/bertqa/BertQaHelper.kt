@@ -25,7 +25,8 @@ import android.os.SystemClock
 import android.util.Log
 import org.tensorflow.lite.task.text.qa.QaAnswer
 
-import org.tensorflow.lite.examples.bertqa.QaAnswerData
+import org.tensorflow.lite.examples.bertqaservice.QaAnswerData
+import org.tensorflow.lite.examples.bertqaservice.IBertQaInterface
 
 class BertQaHelper(
     val context: Context,

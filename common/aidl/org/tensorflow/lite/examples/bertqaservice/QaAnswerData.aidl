@@ -1,5 +1,5 @@
 // QaAnswerData.aidl
-package org.tensorflow.lite.examples.bertqa;
+package org.tensorflow.lite.examples.bertqaservice;
 
 parcelable QaAnswerData {
     String text;
