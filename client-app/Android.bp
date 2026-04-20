@@ -1,0 +1,31 @@
+package {
+    default_applicable_licenses: ["Android-Apache-2.0"],
+}
+
+android_app {
+    name: "TfLiteBertQADemoProvisioning",
+    srcs: ["java/**/*.kt", "java/**/*.java", "androidx_viewbinding_src/**/*.java"],
+    resource_dirs: ["res"],
+    asset_dirs: ["./assets"],
+    static_libs: [
+        "tflite_bertqa_demo_provisioning_service_aidl_interface-java",
+        "androidx-constraintlayout_constraintlayout",
+        "androidx.appcompat_appcompat",
+        "com.android.microdroid.testservice-java",
+        "androidx.navigation_navigation-fragment-ktx",
+        "com.google.android.material_material",
+        "androidx.navigation_navigation-ui",
+        "TFLiteTaskTestProvisioning-lib",
+        "TFLiteTaskBaseProvisioning-lib",
+        "gson-provisioning-lib"
+    ],
+    sdk_version: "system_current",
+    jni_libs: [],
+    jni_uses_platform_apis: true,
+    use_embedded_native_libs: true,
+    v4_signature: true,
+    min_sdk_version: "33",
+    optimize: {
+        proguard_flags_files: ["proguard.flags"]
+    }
+}
