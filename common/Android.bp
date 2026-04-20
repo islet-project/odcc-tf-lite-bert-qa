@@ -1,0 +1,35 @@
+aidl_interface {
+    name: "org.tensorflow.lite.examples.bertqa-aidl",
+    srcs: [ "aidl/**/*.aidl" ],
+    local_include_dir: "aidl",
+    unstable: true,
+    backend: {
+        java: {
+            enabled: true,
+        },
+    },
+}
+
+android_library_import {
+    name: "TFLiteTaskTest-lib",
+    aars: [
+        "precompiled-libs/tensorflow-lite-task-text-0.3.0.aar"
+    ],
+    extract_jni: true,
+    product_specific: true,
+}
+
+android_library_import {
+    name: "TFLiteTaskBase-lib",
+    aars: [
+        "precompiled-libs/tensorflow-lite-task-base-0.3.0.aar"
+    ],
+}
+
+java_import {
+    name: "gson-lib",
+    jars: [
+        "precompiled-libs/gson-2.9.0.jar"
+    ],
+}
+
