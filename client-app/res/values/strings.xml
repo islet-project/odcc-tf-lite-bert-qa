@@ -25,6 +25,7 @@
     <string name="bottom_sheet_label_threads">Number of Threads</string>
     <string name="bottom_sheet_label_delegate">Delegate</string>
     <string name="bottom_view_inference_time">Inference Time: %d ms</string>
+    <string name="performing_inference">Performing inference...</string>
 
     <string-array name="delegate_spinner_titles">
         <item>CPU</item>
