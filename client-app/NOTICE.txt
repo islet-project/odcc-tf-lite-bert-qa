@@ -1,0 +1,4 @@
+Information about "The Question & Answer data file"
+===================================================
+
+The data file (assets/qa.json) was downloaded from: https://storage.googleapis.com/download.tensorflow.org/models/tflite/bert_qa/contents_from_squad.json
