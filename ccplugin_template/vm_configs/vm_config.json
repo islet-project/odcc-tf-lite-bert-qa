@@ -1,0 +1,7 @@
+{
+  "task": {
+    "type": "microdroid_launcher",
+    "command": "libccplugin_native.so"
+  },
+  "export_tombstones": true
+}

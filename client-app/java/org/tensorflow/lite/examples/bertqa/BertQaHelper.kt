@@ -1,5 +1,6 @@
 /*
  * Copyright 2022 The TensorFlow Authors. All Rights Reserved.
+ * Copyright (c) 2026 Samsung Electronics Co., Ltd. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+// Samsung's changes: Put the TFLite model into a separate bound service
+
 package org.tensorflow.lite.examples.bertqa
 
 import android.content.ComponentName
@@ -25,7 +29,8 @@ import android.os.SystemClock
 import android.util.Log
 import org.tensorflow.lite.task.text.qa.QaAnswer
 
-import org.tensorflow.lite.examples.bertqa.QaAnswerData
+import org.tensorflow.lite.examples.bertqaservice.QaAnswerData
+import org.tensorflow.lite.examples.bertqaservice.IBertQaInterface
 
 class BertQaHelper(
     val context: Context,

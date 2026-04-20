@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="org.tensorflow.lite.examples.bertqaservice">
+
+    <uses-permission android:name="android.permission.MANAGE_VIRTUAL_MACHINE" />
+    <uses-permission android:name="android.permission.USE_CUSTOM_VIRTUAL_MACHINE" />
+    <uses-feature android:name="android.software.virtualization_framework" android:required="true" />
+    <application>
+        <service android:name=".BertQaService"
+                 android:enabled="true"
+                 android:exported="true">
+            <intent-filter>
+                <action android:name="org.tensorflow.lite.examples.bertqaservice.BertQaService" />
+            </intent-filter>
+        </service>
+    </application>
+
+</manifest>
