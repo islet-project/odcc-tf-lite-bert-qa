@@ -1,0 +1,30 @@
+-keep class org.tensorflow.lite.task.core.** {
+    *;
+}
+
+-keepclassmembers class org.tensorflow.lite.task.core.** {
+    *;
+}
+
+-keep class org.tensorflow.lite.task.text.qa.** {
+    *;
+}
+-keepclassmembers class org.tensorflow.lite.task.text.qa.** {
+    *;
+}
+
+-keep class com.google.auto.value.** {
+    *;
+}
+
+-keepclassmembers class com.google.auto.value.** {
+    *;
+}
+
+-keep class org.tensorflow.lite.annotations.** {
+    *;
+}
+
+-keepclassmembers class org.tensorflow.lite.annotations.** {
+    *;
+}

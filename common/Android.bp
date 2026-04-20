@@ -1,0 +1,53 @@
+// Copyright (c) 2026 Samsung Electronics Co., Ltd. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
+
+aidl_interface {
+    name: "tflite_bertqa_demo_service_aidl_interface",
+    srcs: [ "aidl/**/*.aidl" ],
+    local_include_dir: "aidl",
+    unstable: true,
+    backend: {
+        java: {
+            enabled: true,
+        },
+    },
+}
+
+filegroup {
+    name: "tflite_bertqa_demo_service_aidl_for_realm",
+    srcs: ["aidl/org/tensorflow/lite/examples/bertqaservice/IBertQaInterface.aidl"],
+}
+
+filegroup {
+    name: "tflite_bertqa_demo_service_imported_aidl_for_realm",
+    srcs: ["aidl/org/tensorflow/lite/examples/bertqaservice/QaAnswerData.aidl"],
+}
+
+filegroup {
+    name: "tflite_bertqa_demo_service_uppermost_android_bp_path",
+    srcs: ["Android.bp"],
+}
+
+android_library_import {
+    name: "TFLiteTaskTest-lib",
+    aars: [
+        "precompiled-libs/tensorflow-lite-task-text-0.3.0.aar"
+    ],
+    extract_jni: true,
+    product_specific: true,
+}
+
+android_library_import {
+    name: "TFLiteTaskBase-lib",
+    aars: [
+        "precompiled-libs/tensorflow-lite-task-base-0.3.0.aar"
+    ],
+}
+
+java_import {
+    name: "gson-lib",
+    jars: [
+        "precompiled-libs/gson-2.9.0.jar"
+    ],
+}
+
