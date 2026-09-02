@@ -1,0 +1,4 @@
+[
+	{ "address": "192.168.97.1", "port": 1337, "protocol": "Tcp", "tx_bytes_limit": 4096 }
+]
+
